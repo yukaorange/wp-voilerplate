@@ -5,6 +5,9 @@
     <div class="">
       コンテンツ
     </div>
+    <div class="_en _italic">
+      contains
+    </div>
 
 
 

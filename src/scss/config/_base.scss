@@ -26,6 +26,7 @@
   --margin: 0.6rem;
   --gap: 1.2rem;
   --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 23) / 24); //24cols
+
   --section-space: 35rem;
 
   //animation
@@ -33,7 +34,7 @@
   --duration: 0.2s;
 
   //shadow
-  --blue-shadow: 0 0 0.3rem var(--water-1);
+  // --blue-shadow: 0 0 0.3rem var(--water-1);
 }
 
 @include mq(sp) {
@@ -41,6 +42,7 @@
     --margin: 2rem;
     --gap: 0.8rem;
     --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 7) / 8); //8cols
+
     --section-space: 25rem;
   }
 }
@@ -59,25 +61,25 @@ html {
   font-size: calc(var(--vw) / 144);
   min-height: 100svh;
   overscroll-behavior-y: none;
-  scrollbar-color: var(--black-1) var(--baige-1); //webkit
+  scrollbar-color: var(--black-1) var(--white-1); //webkit
   scrollbar-width: thin; //webkit
 
-  touch-action: pan-x pan-y;
+  // touch-action: pan-x pan-y;
+}
+
+body {
+  font-family: "Noto Sans JP", "Open Sans", sans-serif;
+  font-size: var(--font-size-base);
 }
 
 @include mq(sp) {
   html {
     font-size: calc(var(--vw) / 36);
   }
-}
 
-body {
-  font-family: "Noto Sans JP", "Open Sans", sans-serif;
-  font-size: var(--font-size-base);
-  letter-spacing: 0.07em;
-  line-height: 1.5;
-
-  background-color: var(--baige-1);
+  body {
+    font-size: var(--font-size-base);
+  }
 }
 
 p,
@@ -169,6 +171,7 @@ ol {
 
 button {
   touch-action: manipulation;
+  color: var(--black-1);
 }
 
 // SVGスプライトのためのスタイル
@@ -187,82 +190,82 @@ button {
 
 //font-size
 :root {
-  --font-size-small-3: calc(#{text(16)} * 8 / 11);
-  --font-size-small-2: calc(#{text(16)} * 8 / 10);
-  --font-size-small-1: calc(#{text(16)} * 8 / 9);
-  --font-size-base: calc(#{text(16)} * 8 / 8);
-  --font-size-1: calc(#{text(16)} * 8 / 7);
-  --font-size-2: calc(#{text(16)} * 8 / 6);
-  --font-size-3: calc(#{text(16)} * 8 / 5);
-  --font-size-4: calc(#{text(16)} * 8 / 4);
-  --font-size-5: calc(#{text(16)} * 8 / 3);
-  --font-size-6: calc(#{text(16)} * 8 / 2);
-  --font-size-7: calc(#{text(16)} * 8 / 1);
-  --font-size-8: calc(#{text(16)} * 8 / 0.8);
-  --font-size-9: calc(#{text(16)} * 8 / 0.6);
+  --font-size-small-3: calc(#{text(15)} * 8 / 11);
+  --font-size-small-2: calc(#{text(15)} * 8 / 10);
+  --font-size-small-1: calc(#{text(15)} * 8 / 9);
+  --font-size-base: calc(#{text(15)} * 8 / 8);
+  --font-size-1: calc(#{text(15)} * 8 / 7);
+  --font-size-2: calc(#{text(15)} * 8 / 6);
+  --font-size-3: calc(#{text(15)} * 8 / 5);
+  --font-size-4: calc(#{text(15)} * 8 / 4);
+  --font-size-5: calc(#{text(15)} * 8 / 3);
+  --font-size-6: calc(#{text(15)} * 8 / 2);
+  --font-size-7: calc(#{text(15)} * 8 / 1);
+  --font-size-8: calc(#{text(15)} * 8 / 0.8);
+  --font-size-9: calc(#{text(15)} * 8 / 0.6);
   @include mq(sp) {
-    --font-size-small-3: calc(#{text(14)} * 16 / 19);
-    --font-size-small-2: calc(#{text(14)} * 16 / 18);
-    --font-size-small-1: calc(#{text(14)} * 16 / 17);
-    --font-size-base: calc(#{text(14)} * 16 / 16);
-    --font-size-1: calc(#{text(14)} * 16 / 15);
-    --font-size-2: calc(#{text(14)} * 16 / 14);
-    --font-size-3: calc(#{text(14)} * 16 / 13);
-    --font-size-4: calc(#{text(14)} * 16 / 12);
-    --font-size-5: calc(#{text(14)} * 16 / 11);
-    --font-size-6: calc(#{text(14)} * 16 / 10);
-    --font-size-7: calc(#{text(14)} * 16 / 9);
-    --font-size-8: calc(#{text(14)} * 16 / 8);
-    --font-size-9: calc(#{text(14)} * 16 / 7);
+    --font-size-small-3: calc(#{text(13)} * 16 / 19);
+    --font-size-small-2: calc(#{text(13)} * 16 / 18);
+    --font-size-small-1: calc(#{text(13)} * 16 / 17);
+    --font-size-base: calc(#{text(13)} * 16 / 16);
+    --font-size-1: calc(#{text(13)} * 16 / 15);
+    --font-size-2: calc(#{text(13)} * 16 / 14);
+    --font-size-3: calc(#{text(13)} * 16 / 13);
+    --font-size-4: calc(#{text(13)} * 16 / 12);
+    --font-size-5: calc(#{text(13)} * 16 / 11);
+    --font-size-6: calc(#{text(13)} * 16 / 10);
+    --font-size-7: calc(#{text(13)} * 16 / 9);
+    --font-size-8: calc(#{text(13)} * 16 / 8);
+    --font-size-9: calc(#{text(13)} * 16 / 7);
   }
 }
 
 //color
 :root {
   --white-1: #ffffff;
-  --white-2: rgba(255, 255, 255, 0.7);
-  --white-3: rgba(255, 249, 245, 0.8);
-  --black-1: #222220;
-  --black-2: rgba(0, 0, 0, 0.72);
-  --black-3: rgba(0, 0, 0, 0.5);
-  --black-4: rgba(0, 0, 0, 0.3);
-  --black-5: rgba(0, 0, 0, 0.1);
-  --gray-1: #7e7f97;
-  --gray-2: #d8d8d8;
-  --gray-3: #f2f2f2;
-  --gray-4: #f5f5f5;
-  --gray-5: #f7f7f7;
-  --gray-6: #f9f9f9;
-  --red-1: #9d1c10;
-  --red-2: #e57373;
-  --red-3: #ef5350;
-  --red-4: #f44336;
-  --red-5: #d32f2f;
-  --green-1: #586c4a;
-  --green-2: #81c784;
-  --green-3: #66bb6a;
-  --green-4: #4caf50;
-  --green-5: #388e3c;
-  --blue-1: #393fc8;
-  --blue-2: #64b5f6;
-  --blue-3: #42a5f5;
-  --blue-4: #2196f3;
-  --blue-5: #1976d2;
-  --yellow-1: #f9c767;
-  --yellow-2: #fff176;
-  --yellow-3: #ffee58;
-  --yellow-4: #ffeb3b;
-  --yellow-5: #fdd835;
-  --brown-1: #423320;
-  --brown-2: #8d6e63;
-  --brown-3: #795548;
-  --brown-4: #6d4c41;
-  --brown-5: #5d4037;
-  --baige-1: #fafaf2;
-  --baige-2: #e2e2de;
-  --baige-3: #a09b93;
-  --baige-4: #818170;
-  --baige-5: #fafaf2;
+  // --white-2: #fefff3;
+  // --white-3: rgba(255, 249, 245, 0.8);
+  --black-1: #3c3b3b;
+  // --black-2: rgba(0, 0, 0, 0.72);
+  // --black-3: rgba(0, 0, 0, 0.5);
+  // --black-4: rgba(0, 0, 0, 0.3);
+  // --black-5: rgba(0, 0, 0, 0.1);
+  --gray-1: #797979;
+  --gray-2: #d6d6d6;
+  // --gray-3: #f2f2f2;
+  // --gray-4: #f5f5f5;
+  // --gray-5: #f7f7f7;
+  // --gray-6: #f9f9f9;
+  --red-1: #e60012;
+  // --red-2: #e57373;
+  // --red-3: #ef5350;
+  // --red-4: #f44336;
+  // --red-5: #d32f2f;
+  --green-1: #3b4926;
+  // --green-2: #81c784;
+  // --green-3: #66bb6a;
+  // --green-4: #4caf50;
+  // --green-5: #388e3c;
+  // --blue-1: #393fc8;
+  // --blue-2: #64b5f6;
+  // --blue-3: #42a5f5;
+  // --blue-4: #2196f3;
+  // --blue-5: #1976d2;
+  // --yellow-1: #f9c767;
+  // --yellow-2: #fff176;
+  // --yellow-3: #ffee58;
+  // --yellow-4: #ffeb3b;
+  // --yellow-5: #fdd835;
+  // --brown-1: #423320;
+  // --brown-2: #8d6e63;
+  // --brown-3: #795548;
+  // --brown-4: #6d4c41;
+  // --brown-5: #5d4037;
+  --baige-1: #fefff3;
+  // --baige-2: #e2e2de;
+  // --baige-3: #a09b93;
+  // --baige-4: #818170;
+  // --baige-5: #fafaf2;
 }
 
 // easing
