@@ -1,0 +1,29 @@
+@use "./../mixin/" as *;
+
+.tab-basic {
+}
+
+.tab-basic__toggle {
+}
+
+.tab-basic__button {
+}
+
+.tab-basic__button.active-tab {
+  border-bottom: 0.1rem solid var(--black-1);
+}
+
+.tab-basic__contents {
+}
+
+.tab-basic__content {
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+.tab-basic__content.active-content {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}

@@ -1,0 +1,18 @@
+@use "./../mixin/" as *;
+.header {
+  border: 0.1rem solid var(--black-1);
+}
+
+.header__inner {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+}
+
+.header__logo {
+  width: calc(var(--col) * 10);
+}
+
+.header__logo img {
+  object-fit: contain;
+}

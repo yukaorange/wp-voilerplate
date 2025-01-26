@@ -1,0 +1,6 @@
+@use "./../mixin/" as *;
+
+.footer {
+  margin-top: 0.5rem;
+  border: 0.1rem solid var(--green-1);
+}

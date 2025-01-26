@@ -1,0 +1,7 @@
+@use "./../mixin/" as *;
+
+.main {
+
+  margin-top: 0.5rem;
+  border: 0.1rem solid var(--blue-1);
+}
