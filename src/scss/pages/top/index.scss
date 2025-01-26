@@ -1,0 +1,4 @@
+@use "./../../mixin/" as *;
+
+@forward "./top-title";
+@forward "./top-gallery";

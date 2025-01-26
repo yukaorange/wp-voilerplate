@@ -1,6 +1,6 @@
 import map from 'lodash/map'
 import GSAP from 'gsap'
-import Logger from '@ts/common/utility/Logger'
+import Logger from '@ts/utility/Logger'
 
 import * as THREE from 'three'
 

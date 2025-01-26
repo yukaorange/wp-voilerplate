@@ -1,9 +1,14 @@
 <footer class="footer" id="footer">
-
-  <?php get_template_part("template-part/component/footer-nav"); ?>
+  <div class="footer__inner">
+    <div class="sns">
+      <div class="sns__item">
+        <a target="_blank" href="https://x.com/webcreaterfrm30" class="sns__link">X</a>
+        <a target="_blank" href="https://github.com/yukaorange" class="sns__link">GitHub</a>
+      </div>
+    </div>
+  </div>
 
 </footer>
-<div id="webgl"></div>
 <?php wp_footer(); ?>
 </body>
 

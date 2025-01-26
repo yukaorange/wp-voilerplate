@@ -3,45 +3,66 @@
 @use "./../mixin/" as *;
 
 :root {
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
   --vw: 100vw; //this value will be changed by js
   --vh: 100vh; //this value will be changed by js
+  --header-height: 0; //this value will be changed by js
+  --vh: 100vh; //this value will be changed by js
 
-  --header-height: 8rem; //this value will be changed by js
+  //z-index
+  --z-index-loading-preparing: 29800;
+  --z-index-loading-overlay: 30000;
+  --z-index-loading: 31000;
+  --z-index-header: 10000;
+  --z-index-drawer-button: 1800;
+  --z-index-drawer: 1500;
+  --z-index-menuarea: 1000;
+  --z-index-overlay: 500;
+  --z-index-transition: 300;
+  --z-index-webgl: -100;
+  --z-index-bg: -1000;
 
-  --inner: calc(var(--vw) - 26.6rem);
+  //layout
+  --margin: 0.6rem;
+  --gap: 1.2rem;
+  --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 23) / 24); //24cols
+  --section-space: 35rem;
 
-  --col: calc((var(--vw) - 26.6rem) / 28);
-  --margin: 4rem;
-
+  //animation
   --delay: 0.2s;
-  --duration: 0.4s;
-  --timing-function: var(--easeInOutQuint);
+  --duration: 0.2s;
+
+  //shadow
+  --blue-shadow: 0 0 0.3rem var(--water-1);
 }
 
 @include mq(sp) {
   :root {
-    --inner: calc(var(--vw) - 4rem);
-    --col: calc((var(--vw) - 4rem) / 11);
+    --margin: 2rem;
+    --gap: 0.8rem;
+    --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 7) / 8); //8cols
+    --section-space: 25rem;
   }
 }
 
 ::-webkit-scrollbar {
 }
 ::-webkit-scrollbar-track {
-  background-color: #ccc;
+  background-color: var(--black-1);
 }
 ::-webkit-scrollbar-thumb {
+  background-color: var(--black-1);
   border-radius: 1rem;
-  background-color: #444;
 }
 
 html {
-  font-size: calc(var(--vw) / 136.6);
-  scrollbar-width: thin; //webkit
-  scrollbar-color: #444 #ccc; //webkit
-  min-height: 100vh;
-
+  font-size: calc(var(--vw) / 144);
+  min-height: 100svh;
   overscroll-behavior-y: none;
+  scrollbar-color: var(--black-1) var(--baige-1); //webkit
+  scrollbar-width: thin; //webkit
+
+  touch-action: pan-x pan-y;
 }
 
 @include mq(sp) {
@@ -51,20 +72,12 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
-  font-family:
-    "Noto Sans JP",
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    "Open Sans",
-    "Helvetica Neue",
-    sans-serif;
+  font-family: "Noto Sans JP", "Open Sans", sans-serif;
+  font-size: var(--font-size-base);
+  letter-spacing: 0.07em;
+  line-height: 1.5;
+
+  background-color: var(--baige-1);
 }
 
 p,
@@ -169,38 +182,38 @@ button {
 }
 
 * {
-  min-inline-size: 0; 
+  min-inline-size: 0;
 }
 
 //font-size
 :root {
-  --font-size-small-3: calc(1.5rem * 8 / 11);
-  --font-size-small-2: calc(1.5rem * 8 / 10);
-  --font-size-small-1: calc(1.5rem * 8 / 9);
-  --font-size-base: calc(1.5rem * 8 / 8);
-  --font-size-1: calc(1.5rem * 8 / 7);
-  --font-size-2: calc(1.5rem * 8 / 6);
-  --font-size-3: calc(1.5rem * 8 / 5);
-  --font-size-4: calc(1.5rem * 8 / 4);
-  --font-size-5: calc(1.5rem * 8 / 3);
-  --font-size-6: calc(1.5rem * 8 / 2);
-  --font-size-7: calc(1.5rem * 8 / 1);
-  --font-size-8: calc(1.5rem * 8 / 0.8);
-  --font-size-9: calc(1.5rem * 8 / 0.6);
+  --font-size-small-3: calc(#{text(16)} * 8 / 11);
+  --font-size-small-2: calc(#{text(16)} * 8 / 10);
+  --font-size-small-1: calc(#{text(16)} * 8 / 9);
+  --font-size-base: calc(#{text(16)} * 8 / 8);
+  --font-size-1: calc(#{text(16)} * 8 / 7);
+  --font-size-2: calc(#{text(16)} * 8 / 6);
+  --font-size-3: calc(#{text(16)} * 8 / 5);
+  --font-size-4: calc(#{text(16)} * 8 / 4);
+  --font-size-5: calc(#{text(16)} * 8 / 3);
+  --font-size-6: calc(#{text(16)} * 8 / 2);
+  --font-size-7: calc(#{text(16)} * 8 / 1);
+  --font-size-8: calc(#{text(16)} * 8 / 0.8);
+  --font-size-9: calc(#{text(16)} * 8 / 0.6);
   @include mq(sp) {
-    --font-size-small-3: calc(1.3rem * 16 / 19);
-    --font-size-small-2: calc(1.3rem * 16 / 18);
-    --font-size-small-1: calc(1.3rem * 16 / 17);
-    --font-size-base: calc(1.3rem * 16 / 16);
-    --font-size-1: calc(1.3rem * 16 / 15);
-    --font-size-2: calc(1.3rem * 16 / 14);
-    --font-size-3: calc(1.3rem * 16 / 13);
-    --font-size-4: calc(1.3rem * 16 / 12);
-    --font-size-5: calc(1.3rem * 16 / 11);
-    --font-size-6: calc(1.3rem * 16 / 10);
-    --font-size-7: calc(1.3rem * 16 / 9);
-    --font-size-8: calc(1.3rem * 16 / 8);
-    --font-size-9: calc(1.3rem * 16 / 7);
+    --font-size-small-3: calc(#{text(14)} * 16 / 19);
+    --font-size-small-2: calc(#{text(14)} * 16 / 18);
+    --font-size-small-1: calc(#{text(14)} * 16 / 17);
+    --font-size-base: calc(#{text(14)} * 16 / 16);
+    --font-size-1: calc(#{text(14)} * 16 / 15);
+    --font-size-2: calc(#{text(14)} * 16 / 14);
+    --font-size-3: calc(#{text(14)} * 16 / 13);
+    --font-size-4: calc(#{text(14)} * 16 / 12);
+    --font-size-5: calc(#{text(14)} * 16 / 11);
+    --font-size-6: calc(#{text(14)} * 16 / 10);
+    --font-size-7: calc(#{text(14)} * 16 / 9);
+    --font-size-8: calc(#{text(14)} * 16 / 8);
+    --font-size-9: calc(#{text(14)} * 16 / 7);
   }
 }
 
@@ -209,7 +222,7 @@ button {
   --white-1: #ffffff;
   --white-2: rgba(255, 255, 255, 0.7);
   --white-3: rgba(255, 249, 245, 0.8);
-  --black-1: #50524e;
+  --black-1: #222220;
   --black-2: rgba(0, 0, 0, 0.72);
   --black-3: rgba(0, 0, 0, 0.5);
   --black-4: rgba(0, 0, 0, 0.3);
@@ -245,6 +258,11 @@ button {
   --brown-3: #795548;
   --brown-4: #6d4c41;
   --brown-5: #5d4037;
+  --baige-1: #fafaf2;
+  --baige-2: #e2e2de;
+  --baige-3: #a09b93;
+  --baige-4: #818170;
+  --baige-5: #fafaf2;
 }
 
 // easing

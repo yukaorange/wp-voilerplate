@@ -1,7 +1,13 @@
 // @forward "_archive-basic";
 // @forward "_content-post";
-@forward "_pagination-basic";
+// @forward "_pagination-basic";
 // @forward "_pagination-post";
-@forward "_swiper";
-@forward "_accordion";
-@forward "_tab-changer";
+// @forward "_swiper";
+// @forward "_accordion";
+// @forward "_tab-changer";
+
+@forward "./list-nav";
+@forward "./list-aside";
+@forward "./list-drawer";
+@forward "./resource-grid";
+@forward "./resource";

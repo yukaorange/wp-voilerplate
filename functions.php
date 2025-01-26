@@ -8,7 +8,8 @@ define('THEME_PATH', get_template_directory());
 //define
 
 //開発時はtrue、本番環境ではfalse
-define("IS_VITE_DEVELOPMENT", true);
+
+define("IS_VITE_DEVELOPMENT", false);
 
 define('DIST_DEF', 'dist');
 

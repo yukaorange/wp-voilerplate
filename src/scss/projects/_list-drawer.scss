@@ -1,0 +1,12 @@
+@use "./../mixin/" as *;
+
+.list-drawer-nav {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 0.8rem;
+  line-height: 1;
+}
+
+.item-drawer-nav {
+  font-size: text(14);
+}

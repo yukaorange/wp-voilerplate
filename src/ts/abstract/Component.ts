@@ -1,10 +1,19 @@
 import EventEmitter from 'eventemitter3'
 import { each } from 'lodash'
 
-export type TElement = string | HTMLElement | any
-export type TSelector = string | HTMLElement | any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TElement = any //基本的にstringが入ってきて、HTMLElementに変換されるから、anyでいい。
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TSelector = any //同上
 export type TElements = {
-  [key: string]: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any //同上
+}
+
+export interface ComponentInterface {
+  getElement: () => TElement
+  getElements: () => TElements
+  getInstance: () => Component
 }
 
 /**
@@ -18,10 +27,12 @@ export type TElements = {
 export default abstract class Component extends EventEmitter {
   protected selector: TSelector
   protected selectorChildren: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any
   }
   public element: TElement
   public elements: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any
   }
 
@@ -77,4 +88,6 @@ export default abstract class Component extends EventEmitter {
   public getInstance() {
     return this
   }
+
+  public destroy() {}
 }

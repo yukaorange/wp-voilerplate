@@ -1,0 +1,33 @@
+@use "./../mixin/" as *;
+
+.button-drawer {
+  display: none;
+}
+
+@include mq(sp) {
+  .button-drawer {
+    display: grid;
+    padding-top: 0.3rem;
+    padding-bottom: 0.2rem;
+    padding-inline: 0.6rem;
+    border: 0.1rem solid var(--black-1);
+    position: fixed;
+    width: max-content;
+    right: var(--margin);
+    top: 1.2rem;
+    z-index: var(--z-index-drawer);
+  }
+
+  .button-drawer__text {
+    font-size: text(12);
+    text-transform: uppercase;
+    opacity: 0;
+    display: none;
+    transition: 1s;
+  }
+
+  .button-drawer__text.active {
+    display: block;
+    opacity: 1;
+  }
+}

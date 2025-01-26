@@ -1,21 +1,33 @@
-import each from 'lodash/each'
-import map from 'lodash/map'
 import GSAP from 'gsap'
-import AsyncLoad from '@ts/common/utility/AsyncLoad'
+import map from 'lodash/map'
+import each from 'lodash/each'
 
-import Logger from '@ts/common/utility/Logger'
-
-export type TElement = string | HTMLElement | any
-export type TSelector = string | HTMLElement | any
+import AsyncLoad from '@ts/utility/AsyncLoad'
+import Logger from '@ts/utility/Logger'
+import { StoreInterface } from '@ts/store/StoreProvider'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TElement = any //基本的にstringが入ってきて、HTMLElementに変換されるから、anyでいい。
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TSelector = any //同上
 export type TElements = {
-  [key: string]: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any //同上
 }
 
-export type TPage = {
+export type PageOption = {
   id: string
   element: TElement
   elements: TElements
   device: string
+}
+
+export interface PageInterface {
+  create: () => void
+  set: () => void
+  show: () => void
+  hide: () => void
+  onResize: () => void
+  destroy: () => void
 }
 
 /**
@@ -34,12 +46,14 @@ export default abstract class Page {
   public element: TElement
   public elements: TElements
   device: string
-  private scroll: { [key: string]: number }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private asyncImages: any[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private animationIn: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private animationOut: any
 
-  constructor(params: TPage) {
+  constructor(params: PageOption) {
     this.id = params.id
 
     this.selector = params.element
@@ -57,13 +71,6 @@ export default abstract class Page {
     this.elements = {}
 
     this.asyncImages = []
-
-    this.scroll = {
-      current: 0,
-      target: 0,
-      last: 0,
-      limit: 1000,
-    }
 
     this.animationIn = null
     this.animationOut = null
@@ -203,9 +210,7 @@ export default abstract class Page {
 
   public onScroll() {}
 
-  public onResize(params: { device: string }) {
-    this.device = params.device
-  }
+  public onResize() {}
 
   /**
    * loop

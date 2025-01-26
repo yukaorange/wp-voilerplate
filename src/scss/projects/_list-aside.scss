@@ -1,0 +1,61 @@
+@use "./../mixin/" as *;
+
+.list-aside {
+  display: grid;
+  row-gap: 1rem;
+}
+
+.item-aside {
+  font-size: text(16);
+  line-height: 1.5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .item-aside:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.01rem;
+  }
+}
+
+@include mq(sp) {
+  .list-aside {
+    // --wide: var(--vw);
+    --wide: 39rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+    row-gap: 0;
+    column-gap: 1.2rem;
+    width: calc(var(--wide) * 2.1);
+
+    // animation-name: marquee;
+    // animation-duration: 30s;
+    // animation-iteration-count: infinite;
+    // animation-timing-function: linear;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(50%);
+    }
+    100% {
+      transform: translateX(calc(-100%));
+    }
+  }
+
+  .list-aside--fit {
+    width: 100%;
+    animation: none;
+  }
+
+  .item-aside {
+    font-size: text(14);
+    line-height: 1.5;
+    min-inline-size: auto;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-underline-offset: 0.1rem;
+  }
+}

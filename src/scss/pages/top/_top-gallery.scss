@@ -1,0 +1,40 @@
+@use "./../../mixin/" as *;
+
+.top-gallery {
+  padding-top: calc(var(--section-space) * 1);
+}
+
+.top-gallery__inner {
+  display: grid;
+  grid-template-columns: cols(5) cols(17);
+}
+
+.top-gallery__col {
+}
+
+.top-gallery__col--aside {
+  position: relative;
+  z-index: 0;
+  padding-right: calc(var(--col) * 1);
+}
+
+@include mq(sp) {
+  .top-gallery {
+    padding-top: calc(var(--section-space) * 0.5);
+  }
+
+  .top-gallery__inner {
+    display: grid;
+    grid-template-columns: auto;
+    row-gap: 5rem;
+  }
+
+  .top-gallery__col {
+  }
+
+  .top-gallery__col--aside {
+    position: relative;
+    z-index: 0;
+    padding-right: 0;
+  }
+}

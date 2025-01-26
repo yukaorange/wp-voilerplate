@@ -1,31 +1,20 @@
-# develop usage
-At first correct project-name in .env file.
-To check the development status using BrowserSync, please ensure that your device is connected to the same network and then navigate to `/project-name` next to IP address, adjusting the project name as necessary. Additionally, when verifying with BrowserSync, please set the development mode to false in the `functions.php` settings. Keep it in true state during development to utilize HMR (Hot Module Replacement).
+## 開発環境について
 
-# Project Readme
+viteを使用し、開発時はmain.jsをfunctions.phpから読み込むことで、HMRを行いながら開発を進められるようにしている。また、同一ネットワーク上のデバイスで確認をする際はbrowser syncを使用して進めるモードに切り替えることも可能。
 
-Welcome to our project! This document provides an overview of the project, including setup instructions, development guidelines, and deployment procedures.
+（自分用メモ）:8888 -> browsersync
 
-## Setup Instructions
+vite.config.jsとbrowser-sync.config.cjsとmampをくみあわせることで、
+MAMP（80）: WordPressの基本機能を提供
+Vite（3000）: 開発用アセットとHMRを提供
+Browser-sync（8888）: これらを束ねて自動リロード機能を追加
+という構成。
 
-To get started with this project, follow these steps:
+http://172.20.6:8888/lernign-resource
+にて共通ネットワークのデバイスから動作確認可能（buildしてから、functions.phpのIS_VITE_DEVELOPMENTをfalseにする必要あり）
 
-1. Clone the repository to your local machine.
-2. Install the necessary dependencies by running `npm install`
-3. To start the development server, run `npm run dev`
+## HTML/CSSの設計について
 
-## Development Guidelines
+## WordPressの設計について
 
-When contributing to the project, please adhere to the following guidelines:
-
-- Write clean, maintainable, and efficient code.
-- Follow the coding standards and best practices defined in the project documentation.
-- Ensure that your code passes all tests before submitting a pull request.
-
-## Deployment Procedures
-
-This project is deployed using GitHub Actions. The deployment process is triggered automatically when changes are pushed to the `main` branch. The `.github/workflows/ftp-deploy.yml` file contains the configuration for the deployment process.
-
-Please ensure that you have the necessary permissions and that the FTP credentials are correctly set up in the repository secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`).
-
-Thank you for contributing to our project!
+## TypeScriptの設計について

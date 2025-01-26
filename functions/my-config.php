@@ -19,3 +19,11 @@ if (defined('IS_VITE_DEVELOPMENT') && IS_VITE_DEVELOPMENT === true) {
 
 // テキストエディタの自動整形を無効化
 add_filter('run_wptexturize', '__return_false');
+
+
+// wp_ob_end_flush_all()を無効化
+/**
+ * 参考記事
+ *https://habone.biz/8217
+ **/
+remove_action('shutdown', 'wp_ob_end_flush_all', 1);

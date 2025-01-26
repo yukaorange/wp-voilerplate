@@ -1,0 +1,30 @@
+@use "./../mixin/" as *;
+
+.nav-desktop {
+  // display: none;
+}
+
+// .nav-common.active {
+//   display: block;
+//   position: fixed;
+//   z-index: 1000;
+//   inset: 0;
+//   background-color: var(--gray-2);
+//   overscroll-behavior-y: contain;
+//   overflow-y: auto;
+//   scrollbar-width: none;
+//   scrollbar-color: #444 #ccc;
+// }
+
+.nav-desktop__inner {
+  // min-height: calc(100svh + 1px);
+  // display: grid;
+  // align-content: center;
+  // justify-content: center;
+}
+
+@include mq(sp) {
+  .nav-desktop {
+    display: none;
+  }
+}

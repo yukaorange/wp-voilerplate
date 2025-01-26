@@ -1,80 +1,56 @@
-// import each from 'lodash/each';
-import normalizeWheel from 'normalize-wheel'
-import Barba from '@barba/core'
-
-// import Canvas from './webgl';
-
-import Logger from '@ts/common/utility/Logger'
-
-import Assets from '@ts/common/singleton/Assets'
-import MetaManager from '@ts/common/utility/MetaManager'
-import BreakpointsObserver from '@ts/common/utility/BreakpointsObserver'
-import UserAgent from '@ts/common/utility/UserAgent'
-import Preloader, { Loader, Animator } from '@ts/common/layout/Preloader'
-import ViewportCalculator from '@ts/common/utility/ViewportCalculator'
-import DrawerNavigation, { DrawerMenu, DrawerButton } from '@ts/common/layout/DrawerNavigation'
-import Header, { HeaderScrollObserver, HeaderHeightCalculator } from '@ts/common/layout/Header'
-import Transition from '@ts/common/ui/Transition'
-import Canvas, { TCanvas } from '@ts/webgl/index'
-
-import Home from '@ts/pages/Home/Home'
-import About from '@ts/pages/about/About'
-// import Page3 from './pages/Page3/Page3';
+import Logger from '@ts/utility/Logger'
+import BreakpointsObserver from '@ts/utility/BreakpointsObserver'
+import UserAgent from '@ts/utility/UserAgent'
+import Preloader, { Loader, Animator } from '@ts/common/Preloader'
+import ViewportCalculator from '@ts/utility/ViewportCalculator'
+import DrawerNavigation, { DrawerMenu, DrawerButton } from '@ts/common/DrawerNavigation'
+import Header, { HeaderScrollObserver, HeaderHeightCalculator } from '@ts/common/Header'
+import { Top } from '@ts/pages/Top/Top'
+import { PageInterface } from '@ts/abstract/Page'
+import { StoreInterface, StoreProvider, Store } from '@ts/store/StoreProvider'
 
 class App {
   //information
-  private device: string
+  private device: string = ''
   private content: HTMLElement
-  private template: string | null
-  private userAgent: UserAgent | null
+  private template: string | null = ''
+  private userAgent: UserAgent | null = null
 
   //observer
-  private viewportCalculator: ViewportCalculator | null
-  private breakpointsObserver: BreakpointsObserver | null
+  private viewportCalculator: ViewportCalculator | null = null
+  private breakpointsObserver: BreakpointsObserver | null = null
 
-  //singleton
-  private assets: Assets
-
-  //webgl experience
-  private canvas: Canvas | null
+  //store
+  private storeProvider: StoreProvider | null = null
+  private store: Store | null = null
 
   //UI layout
-  private preloader: Preloader | null
-  private drawerNavigation: DrawerNavigation | null
-  private header: Header | null
-  private pages: { [key: string]: any }
-  private page: any
-  private transition: Transition | null
-
-  //loop
-  private frame: any | null = null
+  // private preloader: Preloader | null = null
+  private drawerNavigation: DrawerNavigation | null = null
+  private header: Header | null = null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private pages: { [key: string]: PageInterface } = {}
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private page: PageInterface | null = null
 
   constructor() {
     Logger.enable() //enable or disable
 
-    //information
+    //content
     this.content = document.querySelector('[data-ui="content"]') as HTMLElement
-    this.device = ''
-    this.template = ''
-    this.userAgent = null
 
-    //observer
-    this.breakpointsObserver = null
-    this.viewportCalculator = null
-
-    //layout
-    this.preloader = null
-    this.drawerNavigation = null
-    this.header = null
-    this.pages = {}
-    this.page = null
-    this.transition = null
-
-    //singleton
-    this.assets = Assets.getInstance()
-
-    //webgl experience
-    this.canvas = null
+    {
+      /**
+       * アプリケーション初期化の流れ
+       *
+       * （１）テンプレートの特定やビューポートサイズの取得など、ベースになる情報を作成
+       * （２）基本的なUIパーツの作成
+       * （３）コンポーネントを跨いで共有する情報をstoreに格納
+       * （４）ページコンポーネントの作成
+       * （５）イベントリスナの作成
+       * （６）ページを表示
+       */
+    }
 
     //information provider
     this.identifyTemplate()
@@ -83,19 +59,18 @@ class App {
     this.createViewportCalculator()
 
     //init layout parts
-    this.createPreloader()
+    // this.createPreloader()
     this.createDrawerNavigation()
-    this.createHeader()
+    this.createHeaderUI()
+
+    //store
+    this.createStore()
+
+    //pages
     this.createPages()
 
-    //webgl experience
-    this.createCanvas()
-
-    //page transition
-    this.createTransition()
-
-    //add listeners
-    this.addEventListeners()
+    //events
+    this.createEvents()
 
     //app start
     this.start()
@@ -112,27 +87,30 @@ class App {
       body: document.body,
     })
 
-    Logger.log(`from App.ts / this.userAgent: ${this.userAgent}`)
+    Logger.log(`from App.ts / this.userAgent:`, this.userAgent.getData())
   }
 
   private createBreakPointObserver() {
-    const indicator = document.querySelector('[data-ui="indicator"]') as HTMLElement
+    const indicator = document.querySelector('[data-ui="indicator"]') || null
 
     const breakpoints = {
       sp: 868,
     }
 
-    this.breakpointsObserver = new BreakpointsObserver(breakpoints, indicator)
+    this.breakpointsObserver = new BreakpointsObserver({
+      breakpoints: breakpoints,
+      indicator: indicator,
+    })
 
     this.device = this.breakpointsObserver.getCurrentDevice() as string
   }
 
-  private createPreloader() {
-    const loader = new Loader()
-    const animator = new Animator()
+  // private createPreloader() {
+  //   const loader = new Loader()
+  //   const animator = new Animator()
 
-    this.preloader = new Preloader(loader, animator)
-  }
+  //   this.preloader = new Preloader(loader, animator)
+  // }
 
   private createDrawerNavigation() {
     const button = new DrawerButton()
@@ -141,21 +119,14 @@ class App {
     this.drawerNavigation = new DrawerNavigation(button, menu)
   }
 
-  private createHeader() {
+  private createHeaderUI() {
     const headerScrollObserver = new HeaderScrollObserver()
+
     const headerHeightCalculator = new HeaderHeightCalculator()
 
     this.header = new Header(headerScrollObserver, headerHeightCalculator)
 
     this.header.onResize()
-  }
-
-  private createCanvas() {
-    this.canvas = new Canvas({
-      template: this.template,
-      dom: document.querySelector('#webgl'),
-      device: this.device,
-    } as TCanvas)
   }
 
   private createViewportCalculator() {
@@ -166,53 +137,12 @@ class App {
 
   private createPages() {
     this.pages = {
-      home: new Home({ device: this.device }),
-      about: new About({ device: this.device }),
-      // page3: new Page3({ device: this.device }),
+      top: new Top(),
     }
 
     this.page = this.pages[this.template ?? '']
 
-    this.page.create()
-  }
-
-  // Listeners
-  private addEventListeners() {
-    window.addEventListener('mousedown', (event) => {
-      this.onTouchDown(event)
-    })
-
-    window.addEventListener('mousemove', (event) => {
-      this.onTouchMove(event)
-    })
-
-    window.addEventListener('mouseup', (event) => {
-      this.onTouchUp(event)
-    })
-
-    window.addEventListener('touchstart', (event) => {
-      this.onTouchDown(event)
-    })
-
-    window.addEventListener('touchmove', (event) => {
-      this.onTouchMove(event)
-    })
-
-    window.addEventListener('touchend', (event) => {
-      this.onTouchUp(event)
-    })
-
-    window.addEventListener('wheel', (event) => {
-      this.onWheel(event)
-    })
-
-    window.addEventListener('scroll', (event) => {
-      this.onScroll(event)
-    })
-
-    window.addEventListener('resize', () => {
-      this.onResize()
-    })
+    this.page?.create()
   }
 
   /**
@@ -220,80 +150,80 @@ class App {
    */
 
   private onResize() {
+    //detect device
     this.breakpointsObserver?.resize()
 
-    this.device = this.breakpointsObserver?.getCurrentDevice() as string
+    const device = this.breakpointsObserver?.getCurrentDevice() as string
 
+    //update store
+    this.store?.setState('device', device)
+
+    this.store?.setState('viewport', {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    })
+
+    /**
+     * ここから下は、
+     * シングルトンで管理しているstoreのsubscribeで各コンポーネントのリサイズを自分たちにまかせてもいいかもしれない。
+     */
+    //detect header height
+    this.header?.onResize()
+
+    //detect viewport
     this.viewportCalculator?.onResize()
+    /**
+     * ここまで
+     */
 
-    this.page.onResize({ device: this.device })
-
-    this.canvas?.onResize({ device: this.device })
-
-    Logger.log(`from App.ts / resized`)
-  }
-
-  private onTouchDown(event: TouchEvent | MouseEvent) {
-    this.canvas?.onTouchDown(event)
-  }
-
-  private onTouchMove(event: TouchEvent | MouseEvent) {
-    this.canvas?.onTouchMove(event)
-  }
-
-  private onTouchUp(event: TouchEvent | MouseEvent) {
-    this.canvas?.onTouchUp(event)
-  }
-
-  private onWheel(event: WheelEvent) {
-    const normalizedWheel = normalizeWheel(event)
-
-    this.canvas?.onWheel(normalizedWheel)
-  }
-
-  private onScroll(event: Event) {
-    this.header?.onScroll(event)
+    Logger.log(`from App.ts:onResize() => resized`)
   }
 
   /**
-   * page transition
+   * events
    */
-  private createTransition() {
-    this.transition = new Transition(this.pages, this.page)
+  createEvents() {
+    window.addEventListener('resize', () => {
+      this.onResize()
+    })
+  }
+
+  /**
+   * store
+   */
+  createStore() {
+    this.storeProvider = StoreProvider.getInstance()
+
+    this.storeProvider.createStore('app', {
+      device: this.breakpointsObserver?.getCurrentDevice() as string,
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+    })
+
+    this.store = this.storeProvider.getStore('app') ?? null
   }
 
   /**
    * init
    */
   private start() {
-    this.transition?.init()
+    this.page?.set()
 
-    this.preloader?.startLoading()
+    // this.preloader?.once('loaded', async () => {
+    //   await this.preloader?.hideAnimation()
 
-    this.page.set()
+    //   this.update()
 
-    this.preloader?.once('loaded', async () => {
-      await this.preloader?.hideAnimation()
+    //   this.preloader?.destroy()
+    // })
 
-      this.update()
+    this.page?.show()
 
-      this.page.show()
+    this.onResize()
 
-      this.preloader?.destroy()
-
-      this.onResize()
-
-      Logger.log('from App.ts / page started')
-    })
-  }
-
-  /**
-   * update
-   */
-  private update() {
-    this.canvas?.update({})
-
-    this.frame = window.requestAnimationFrame(this.update.bind(this))
+    Logger.log('from App.ts / page started')
   }
 }
 

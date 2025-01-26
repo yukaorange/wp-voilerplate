@@ -1,0 +1,37 @@
+@use "./../mixin/" as *;
+
+.list-nav {
+  display: grid;
+  grid-template-columns: repeat(6, auto);
+  justify-content: end;
+  column-gap: 1.6rem;
+}
+
+.item-nav {
+  line-height: 1;
+  font-size: text(16);
+}
+
+.item-nav ._silkskreen {
+  margin-right: -0.35rem;
+  font-size: text(18);
+}
+
+.item-nav__icon {
+  display: grid;
+  width: 1.4rem;
+  aspect-ratio: 1/1;
+  position: relative;
+  z-index: 0;
+  translate: 0 0.1rem;
+}
+
+.item-nav__link {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: baseline;
+}
+
+.item-nav__link._en {
+  font-weight: 500;
+}

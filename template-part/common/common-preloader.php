@@ -1,5 +1,3 @@
-<?php if (is_front_page()) {; ?>
-<?php }; ?>
 <div class="preloader" data-ui="preloader">
   <div class="preloader__inner">
     <div id="progress" class="preloader__progress">

@@ -1,0 +1,63 @@
+@use "./../mixin/" as *;
+
+.nav-drawer {
+  display: none;
+}
+
+@include mq(sp) {
+  .nav-drawer {
+    padding-top: calc(var(--header-height) * 2);
+    display: grid;
+    position: fixed;
+    z-index: var(--z-index-drawer);
+    background-color: var(--baige-1);
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100dvh;
+    transform: translate(100%, 0%);
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+
+  .nav-drawer.active {
+    transform: translate(0%, 0%);
+  }
+
+  .nav-drawer__inner {
+    padding-inline: var(--margin);
+    min-height: calc(100dvh + 1px);
+    display: grid;
+    row-gap: 3.2rem;
+    align-content: start;
+  }
+
+  .nav-drawer__term {
+    font-size: text(16);
+    font-weight: 500;
+  }
+
+  .nav-drawer__term + * {
+    margin-top: 1.2rem;
+  }
+
+  .nav-drawer__filter {
+  }
+
+  .nav-drawer__cta {
+    margin-top: 5rem;
+    display: grid;
+  }
+
+  .nav-drawer__link {
+    display: grid;
+    justify-content: start;
+    grid-auto-flow: column;
+    align-items: baseline;
+  }
+
+  .nav-drawer__link ._silkskreen {
+    margin-right: -0.18rem;
+    font-size: text(16);
+  }
+}
