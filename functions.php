@@ -9,7 +9,7 @@ define('THEME_PATH', get_template_directory());
 
 //開発時はtrue、本番環境ではfalse
 
-define("IS_VITE_DEVELOPMENT", false);
+define("IS_VITE_DEVELOPMENT", true);
 
 define('DIST_DEF', 'dist');
 

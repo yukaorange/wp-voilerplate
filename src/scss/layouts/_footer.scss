@@ -1,9 +1,1 @@
 @use "./../mixin/" as *;
-
-.footer {
-  padding-top: var(--section-space);
-}
-
-.footer__inner {
-  padding-block: 5rem;
-}
