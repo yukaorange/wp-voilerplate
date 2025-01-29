@@ -1,0 +1,19 @@
+@use "./../mixin/" as *;
+
+.development {
+  padding-block: calc(var(--section-space) * 0.5);
+  margin-inline: auto;
+  width: calc(100% - (var(--col) * 6));
+  display: grid;
+  row-gap: 5rem;
+}
+
+@include mq(sp) {
+  .development {
+    padding-block: calc(var(--section-space) * 0.5);
+    margin-inline: auto;
+    width: calc(100% - (var(--col) * 4));
+    display: grid;
+    row-gap: 5rem;
+  }
+}

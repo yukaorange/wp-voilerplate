@@ -1,0 +1,78 @@
+@use "./../mixin/" as *;
+
+.button-more {
+  width: max-content;
+  grid-template-columns: repeat(2, auto);
+  display: grid;
+  justify-content: start;
+  align-items: center;
+  padding-block: 2rem;
+  padding-inline: 3.2rem;
+  column-gap: 2rem;
+  border: 0.1rem solid var(--black-1);
+  border-radius: 4rem;
+}
+
+.button-more__text {
+  text-transform: uppercase;
+  font-size: text(16);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.button-more__arrow {
+  display: grid;
+  width: 3.25rem;
+  height: 0.75rem;
+  margin-bottom: 0.2rem;
+}
+
+.button-more__blank {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.button-more--small {
+  padding-block: 1.6rem;
+  padding-inline: 2rem;
+  column-gap: 1.2rem;
+}
+
+.button-more--small .button-more__text {
+  font-size: text(14);
+}
+
+.button-more--small .button-more__arrow {
+  width: 3rem;
+  height: 0.75rem;
+}
+
+@include mq(sp) {
+  .button-more {
+    width: max-content;
+    grid-template-columns: repeat(2, auto);
+    display: grid;
+    justify-content: start;
+    align-items: center;
+    padding-block: 1.6rem;
+    padding-inline: 2.4rem;
+    column-gap: 1.6rem;
+    border: 0.1rem solid var(--black-1);
+    border-radius: 4rem;
+  }
+
+  .button-more__text {
+    text-transform: uppercase;
+    font-size: text(14);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .button-more__arrow {
+    display: grid;
+    width: 3.25rem;
+    height: 0.75rem;
+  }
+}

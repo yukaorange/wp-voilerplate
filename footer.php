@@ -1,6 +1,6 @@
 <footer class="footer" id="footer">
   <div class="footer__inner">
-    フッター
+    footer
   </div>
 
 </footer>

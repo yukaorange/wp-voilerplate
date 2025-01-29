@@ -1,0 +1,76 @@
+@use "./../mixin/" as *;
+
+.button-contact {
+  width: max-content;
+  grid-template-columns: repeat(3, auto);
+  display: grid;
+  justify-content: start;
+  align-items: center;
+  padding-block: 1.6rem;
+  padding-inline: 2rem;
+  column-gap: 2rem;
+  border: 0.1rem solid var(--black-1);
+  border-radius: 4rem;
+  color: var(--white-1);
+  background-color: var(--black-1);
+}
+
+.button-contact__text {
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.button-contact__icon {
+}
+
+.button-contact__contact {
+  display: grid;
+  width: 3.8rem;
+  aspect-ratio: 4/3;
+  margin-top: 0.2rem;
+}
+
+.button-contact__arrow {
+  display: grid;
+  width: 3.25rem;
+  height: 0.75rem;
+}
+
+@include mq(sp) {
+  .button-contact {
+    width: 100%;
+    max-width: 31.5rem;
+    grid-template-columns: repeat(3, auto);
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    padding-block: 1.6rem;
+    padding-inline: 2rem;
+    column-gap: 2rem;
+    border: 0.1rem solid var(--black-1);
+    border-radius: 4rem;
+    color: var(--white-1);
+    background-color: var(--black-1);
+  }
+
+  .button-contact__text {
+    line-height: 1.5;
+    font-weight: 700;
+  }
+
+  .button-contact__icon {
+  }
+
+  .button-contact__contact {
+    display: grid;
+    width: 3.5rem;
+    height: 2.3rem;
+    margin-top: 0.2rem;
+  }
+
+  .button-contact__arrow {
+    display: grid;
+    width: 2.4rem;
+    height: 0.75rem;
+  }
+}

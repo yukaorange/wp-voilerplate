@@ -28,7 +28,7 @@
   // --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 23) / 24); //24cols
   --col: calc((var(--vw)) / 36);
 
-  --section-space: 35rem;
+  --section-space: 20rem;
 
   //animation
   --delay: 0.2s;
@@ -45,7 +45,7 @@
     // --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 7) / 8); //8cols
     --col: calc((var(--vw)) / 25);
 
-    --section-space: 25rem;
+    --section-space: 12rem;
   }
 }
 
