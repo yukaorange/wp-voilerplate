@@ -23,9 +23,10 @@
   --z-index-bg: -1000;
 
   //layout
-  --margin: 0.6rem;
-  --gap: 1.2rem;
-  --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 23) / 24); //24cols
+  // --margin: 0.6rem;
+  // --gap: 1.2rem;
+  // --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 23) / 24); //24cols
+  --col: calc((var(--vw)) / 36);
 
   --section-space: 35rem;
 
@@ -39,9 +40,10 @@
 
 @include mq(sp) {
   :root {
-    --margin: 2rem;
-    --gap: 0.8rem;
-    --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 7) / 8); //8cols
+    // --margin: 2rem;
+    // --gap: 0.8rem;
+    // --col: calc((var(--vw) - var(--margin) * 2 - var(--gap) * 7) / 8); //8cols
+    --col: calc((var(--vw)) / 25);
 
     --section-space: 25rem;
   }

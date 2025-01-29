@@ -132,9 +132,9 @@ export default abstract class Page {
       },
     })
 
-    GSAP.set(this.elements.animationText, {
-      autoAlpha: 0,
-    })
+    // GSAP.set(this.elements.animationText, {
+    //   autoAlpha: 0,
+    // })
   }
 
   public show() {
@@ -155,13 +155,13 @@ export default abstract class Page {
       },
     })
 
-    this.animationIn.to(this.elements.animationText, {
-      autoAlpha: 1,
-      delay: 0.2,
-      duration: 0.5,
-      ease: 'power2.out',
-      onStart: () => {},
-    })
+    // this.animationIn.to(this.elements.animationText, {
+    //   autoAlpha: 1,
+    //   delay: 0.2,
+    //   duration: 0.5,
+    //   ease: 'power2.out',
+    //   onStart: () => {},
+    // })
   }
 
   public hide(): Promise<void> {
@@ -181,11 +181,11 @@ export default abstract class Page {
         },
       })
 
-      this.animationOut.to(this.elements.animationText, {
-        autoAlpha: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-      })
+      // this.animationOut.to(this.elements.animationText, {
+      //   autoAlpha: 0,
+      //   duration: 0.5,
+      //   ease: 'power2.out',
+      // })
 
       this.animationOut.to(this.element, {
         autoAlpha: 0,

@@ -4,7 +4,6 @@ export type GlobalState = {
     width: number
     height: number
   }
-  resourceAmount: number
 }
 
 export interface StoreInterface {
@@ -24,7 +23,6 @@ export class Store {
         width: 0,
         height: 0,
       },
-      resourceAmount: 0,
       ...initialState,
     }
 

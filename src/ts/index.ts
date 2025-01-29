@@ -7,7 +7,7 @@ import DrawerNavigation, { DrawerMenu, DrawerButton } from '@ts/common/DrawerNav
 import Header, { HeaderScrollObserver, HeaderHeightCalculator } from '@ts/common/Header'
 import { Top } from '@ts/pages/Top/Top'
 import { PageInterface } from '@ts/abstract/Page'
-import { StoreInterface, StoreProvider, Store } from '@ts/store/StoreProvider'
+import { StoreProvider, Store } from '@ts/store/StoreProvider'
 
 class App {
   //information
@@ -93,8 +93,9 @@ class App {
   private createBreakPointObserver() {
     const indicator = document.querySelector('[data-ui="indicator"]') || null
 
+
     const breakpoints = {
-      sp: 868,
+      sp: 768,
     }
 
     this.breakpointsObserver = new BreakpointsObserver({
@@ -103,6 +104,7 @@ class App {
     })
 
     this.device = this.breakpointsObserver.getCurrentDevice() as string
+
   }
 
   // private createPreloader() {
@@ -130,12 +132,15 @@ class App {
   }
 
   private createViewportCalculator() {
+
     this.viewportCalculator = new ViewportCalculator()
 
     this.viewportCalculator.onResize()
+
   }
 
   private createPages() {
+
     this.pages = {
       top: new Top(),
     }
@@ -143,6 +148,7 @@ class App {
     this.page = this.pages[this.template ?? '']
 
     this.page?.create()
+
   }
 
   /**
@@ -155,6 +161,8 @@ class App {
 
     const device = this.breakpointsObserver?.getCurrentDevice() as string
 
+    this.device = device
+
     //update store
     this.store?.setState('device', device)
 
@@ -163,35 +171,42 @@ class App {
       height: window.innerHeight,
     })
 
-    /**
-     * ここから下は、
-     * シングルトンで管理しているstoreのsubscribeで各コンポーネントのリサイズを自分たちにまかせてもいいかもしれない。
-     */
+
     //detect header height
     this.header?.onResize()
 
     //detect viewport
     this.viewportCalculator?.onResize()
-    /**
-     * ここまで
-     */
+
 
     Logger.log(`from App.ts:onResize() => resized`)
+  }
+
+  private onScroll() {
+    this.header?.onScroll()
   }
 
   /**
    * events
    */
   createEvents() {
+
     window.addEventListener('resize', () => {
       this.onResize()
     })
+
+    window.addEventListener('scroll', () => {
+      this.onScroll()
+    })
+
   }
 
   /**
    * store
+   * (ページの状態を管理、MPAでは使う場面は少なそうだけど念のため、用意している。)
    */
   createStore() {
+
     this.storeProvider = StoreProvider.getInstance()
 
     this.storeProvider.createStore('app', {
@@ -209,6 +224,7 @@ class App {
    * init
    */
   private start() {
+
     this.page?.set()
 
     // this.preloader?.once('loaded', async () => {
@@ -224,6 +240,7 @@ class App {
     this.onResize()
 
     Logger.log('from App.ts / page started')
+
   }
 }
 

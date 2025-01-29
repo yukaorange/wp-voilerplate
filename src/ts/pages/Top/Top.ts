@@ -2,12 +2,10 @@ import Logger from '@ts/utility/Logger'
 import Page from '@ts/abstract/Page'
 import { StoreProvider, Store } from '@ts/store/StoreProvider'
 
-import { ResourceLoader } from './ResourceLoader'
 // import GSAP from 'gsap'
 
 export class Top extends Page {
   private unsubscribe: () => void
-  private resourceLoader = new ResourceLoader()
   private store: Store
   private viewportWidth: number = 0
 
@@ -36,8 +34,6 @@ export class Top extends Page {
 
   public create() {
     super.create()
-
-    this.resourceLoader?.init()
   }
 
   /**
@@ -56,8 +52,6 @@ export class Top extends Page {
   }
 
   public onResize() {
-    //publicに定義しているが、今回のプロジェクトではprivateでのみ使用している。
-
     super.onResize()
   }
 
@@ -66,7 +60,6 @@ export class Top extends Page {
       this.unsubscribe()
     }
 
-    this.resourceLoader?.destroy()
 
     super.destroy()
   }

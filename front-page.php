@@ -5,9 +5,7 @@
     <div class="">
       コンテンツ
     </div>
-    <div class="_en _italic">
-      contains
-    </div>
+    <?php get_template_part("/template-part/common/development"); ?>
 
 
 

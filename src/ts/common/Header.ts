@@ -1,5 +1,5 @@
 import Component from '@ts/abstract/Component'
-import Logger from '@ts/utility/Logger'
+// import Logger from '@ts/utility/Logger'
 
 export default class Header {
   private scrollObserver: HeaderScrollObserverOptions
@@ -18,8 +18,8 @@ export default class Header {
     this.scrollObserver.setQuantity(height)
   }
 
-  onScroll(event: Event) {
-    this.scrollObserver.onScroll(event)
+  onScroll() {
+    this.scrollObserver.onScroll()
   }
 
   onResize() {
@@ -35,7 +35,7 @@ export default class Header {
  * scroll observer
  */
 type HeaderScrollObserverOptions = {
-  onScroll: (event: Event) => void
+  onScroll: () => void
   onResize: (height: number) => void
   setQuantity: (quantity: number) => void
 }
@@ -49,19 +49,20 @@ export class HeaderScrollObserver extends Component {
       elements: {
         logo: '[data-ui="header-Logo"]',
         nav: '[data-ui="global-nav"]',
-        link: '[data-ui="global-nav-item-link"]',
       },
     })
 
     this.monitoredQuantity = 100
   }
 
-  onScroll(event: Event) {
+  onScroll() {
     const scrollPosition = window.scrollY
 
-    this.monitoredQuantity < scrollPosition
-      ? this.element.classList.add('scrolled')
-      : this.element.classList.remove('scrolled')
+    if (this.monitoredQuantity < scrollPosition) {
+      this.element.classList.add('scrolled')
+    } else {
+      this.element.classList.remove('scrolled')
+    }
   }
 
   onResize(quantity: number) {

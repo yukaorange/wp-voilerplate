@@ -33,7 +33,13 @@
   <header class="header" id="header" data-ui="header">
     <div class="header__inner">
       <h1 class="header__logo" data-ui="header-logo">
-        template for wp
+        <a href="<?php echo esc_url(home_url()); ?>">
+          <svg>
+            <use xlink:href="#logo"></use>
+          </svg>
+
+        </a>
+
       </h1>
       <nav class="nav-desktop">
         <div class="nav-desktop__inner">
