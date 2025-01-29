@@ -53,35 +53,42 @@ class App {
     }
 
     //information provider
-    this.identifyTemplate()
-    this.createUserAgentInformer()
-    this.createBreakPointObserver()
-    this.createViewportCalculator()
+    this.identifyTemplate()//現在のページを特定
+    this.createUserAgentInformer()//UAを取得
+    this.createBreakPointObserver()//BPを設定
+    this.createViewportCalculator()//ビューポートのサイズをcssに伝達
 
     //init layout parts
     // this.createPreloader()
-    this.createDrawerNavigation()
-    this.createHeaderUI()
+    this.createDrawerNavigation()//ドロワーナビゲーションのUIを構築
+    this.createHeaderUI()//ヘッダーUIを構築
 
     //store
-    this.createStore()
+    this.createStore()// (ページの状態を管理、MPAでは使う場面は少なそうだけど念のため、用意している。)
 
-    //pages
-    this.createPages()
+    //pages(ページの選択肢を管理)
+    this.createPages()//ページの作成（=>ページ独自の実装はこのメソッド配下に存在）
 
-    //events
+    //events（イベントを登録。原則、リサイズとスクロール）
     this.createEvents()
 
-    //app start
+    //app start（ページの表示）
     this.start()
   }
 
+
+  /**
+   * テンプレートの特定
+   */
   private identifyTemplate() {
     this.template = this.content.getAttribute('data-template') as string
 
     Logger.log(`from App.ts / template: ${this.template} | content: ${this.content}`)
   }
 
+  /**
+   * UAの取得
+   */
   private createUserAgentInformer() {
     this.userAgent = new UserAgent({
       body: document.body,
@@ -90,6 +97,9 @@ class App {
     Logger.log(`from App.ts / this.userAgent:`, this.userAgent.getData())
   }
 
+  /**
+   * スクリプト内部で使用可能なBPを設定
+   */
   private createBreakPointObserver() {
     const indicator = document.querySelector('[data-ui="indicator"]') || null
 
@@ -114,6 +124,10 @@ class App {
   //   this.preloader = new Preloader(loader, animator)
   // }
 
+
+  /**
+   * ドロワーナビのUIを構築
+   */
   private createDrawerNavigation() {
     const button = new DrawerButton()
     const menu = new DrawerMenu()
@@ -121,6 +135,9 @@ class App {
     this.drawerNavigation = new DrawerNavigation(button, menu)
   }
 
+  /**
+   * ヘッダーのUIを構築
+   */
   private createHeaderUI() {
     const headerScrollObserver = new HeaderScrollObserver()
 
@@ -139,6 +156,10 @@ class App {
 
   }
 
+
+  /**
+   * ページ一覧と、現在のページ独自のUIを構築
+   */
   private createPages() {
 
     this.pages = {
@@ -152,9 +173,8 @@ class App {
   }
 
   /**
-   * events
+   * events(各種イベントを定義)
    */
-
   private onResize() {
     //detect device
     this.breakpointsObserver?.resize()
@@ -187,7 +207,7 @@ class App {
   }
 
   /**
-   * events
+   * イベントリスナーの初期化
    */
   createEvents() {
 
@@ -221,7 +241,7 @@ class App {
   }
 
   /**
-   * init
+   * ページの表示
    */
   private start() {
 
