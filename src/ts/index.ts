@@ -34,6 +34,7 @@ class App {
   private page: PageInterface | null = null
 
   constructor() {
+
     Logger.enable() //enable or disable
 
     //content
@@ -54,9 +55,9 @@ class App {
 
     //information provider
     this.identifyTemplate()//現在のページを特定
+    this.createViewportCalculator()//ビューポートのサイズを取得する
     this.createUserAgentInformer()//UAを取得
     this.createBreakPointObserver()//BPを設定
-    this.createViewportCalculator()//ビューポートのサイズをcssに伝達
 
     //init layout parts
     // this.createPreloader()
@@ -74,6 +75,7 @@ class App {
 
     //app start（ページの表示）
     this.start()
+
   }
 
 
@@ -90,19 +92,21 @@ class App {
    * UAの取得
    */
   private createUserAgentInformer() {
+
     this.userAgent = new UserAgent({
       body: document.body,
     })
 
     Logger.log(`from App.ts / this.userAgent:`, this.userAgent.getData())
+
   }
 
   /**
    * スクリプト内部で使用可能なBPを設定
    */
   private createBreakPointObserver() {
-    const indicator = document.querySelector('[data-ui="indicator"]') || null
 
+    const indicator = document.querySelector('[data-ui="indicator"]') || null
 
     const breakpoints = {
       sp: 768,
@@ -112,8 +116,6 @@ class App {
       breakpoints: breakpoints,
       indicator: indicator,
     })
-
-    this.device = this.breakpointsObserver.getCurrentDevice() as string
 
   }
 
@@ -129,30 +131,30 @@ class App {
    * ドロワーナビのUIを構築
    */
   private createDrawerNavigation() {
+
     const button = new DrawerButton()
     const menu = new DrawerMenu()
 
     this.drawerNavigation = new DrawerNavigation(button, menu)
+
   }
 
   /**
    * ヘッダーのUIを構築
    */
   private createHeaderUI() {
+
     const headerScrollObserver = new HeaderScrollObserver()
 
     const headerHeightCalculator = new HeaderHeightCalculator()
 
     this.header = new Header(headerScrollObserver, headerHeightCalculator)
 
-    this.header.onResize()
   }
 
   private createViewportCalculator() {
 
     this.viewportCalculator = new ViewportCalculator()
-
-    this.viewportCalculator.onResize()
 
   }
 
@@ -169,42 +171,25 @@ class App {
     this.page = this.pages[this.template ?? '']
 
     this.page?.create()
-
   }
 
   /**
-   * events(各種イベントを定義)
+   * events(Appにおける各種イベント発火時のメソッド)
    */
   private onResize() {
-    //detect device
-    this.breakpointsObserver?.resize()
-
-    const device = this.breakpointsObserver?.getCurrentDevice() as string
-
-    this.device = device
-
-    //update store
-    this.store?.setState('device', device)
-
+    //update store(MPAでは必要性ほぼない)
+    this.device = this.breakpointsObserver?.getCurrentDevice() as string
+    this.store?.setState('device', this.device)
     this.store?.setState('viewport', {
       width: window.innerWidth,
       height: window.innerHeight,
     })
 
 
-    //detect header height
-    this.header?.onResize()
-
-    //detect viewport
-    this.viewportCalculator?.onResize()
-
-
     Logger.log(`from App.ts:onResize() => resized`)
   }
 
-  private onScroll() {
-    this.header?.onScroll()
-  }
+  private onScroll() { }
 
   /**
    * イベントリスナーの初期化
@@ -238,13 +223,20 @@ class App {
     })
 
     this.store = this.storeProvider.getStore('app') ?? null
+
   }
 
   /**
    * ページの表示
    */
   private start() {
+    //デバイスの特定
+    this.device = this.breakpointsObserver?.getCurrentDevice() as string
 
+    /**
+     * ページを待機させて、プリロードUIの動作終了後にページ表示アニメーションに移行させるロジック
+     */
+    //ページUIの表示待機
     this.page?.set()
 
     // this.preloader?.once('loaded', async () => {
@@ -255,6 +247,7 @@ class App {
     //   this.preloader?.destroy()
     // })
 
+    //ページUIの表示
     this.page?.show()
 
     this.onResize()
@@ -265,5 +258,7 @@ class App {
 }
 
 window.addEventListener('load', () => {
+
   new App()
+
 })

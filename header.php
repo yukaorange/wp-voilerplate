@@ -37,7 +37,6 @@
           <svg>
             <use xlink:href="#logo"></use>
           </svg>
-
         </a>
 
       </h1>

@@ -1,7 +1,8 @@
 import Component from '@ts/abstract/Component'
-// import Logger from '@ts/utility/Logger'
+import Logger from '@ts/utility/Logger'
 
 export default class Header {
+
   private scrollObserver: HeaderScrollObserverOptions
   private heightCalculator: THeaderHeightCalculator
 
@@ -9,25 +10,59 @@ export default class Header {
     scrollObserver: HeaderScrollObserverOptions,
     heightCalculator: THeaderHeightCalculator
   ) {
+
     this.heightCalculator = heightCalculator
 
     this.scrollObserver = scrollObserver
 
-    const height = this.heightCalculator.getHeaderHeight()
+    this.addEventListeners()
 
-    this.scrollObserver.setQuantity(height)
+    this.onResize()
+
   }
 
+
+  private setScrollObserverQuantity() {
+    /**
+     * スクロール量に応じてヘッダーのスタイルを変更するための閾値をHeaderScrollObserverに設定する
+     */
+    const height = this.heightCalculator.getHeaderHeight()
+
+    Logger.log(`from Header.ts:setScrollObserverQuantity() => height:${height}`)
+
+    this.scrollObserver.setQuantity(height)
+
+  }
+
+
   onScroll() {
+
     this.scrollObserver.onScroll()
+
   }
 
   onResize() {
+
     this.heightCalculator.onResize()
 
-    const height = this.heightCalculator.getHeaderHeight()
+    this.setScrollObserverQuantity()
 
-    this.scrollObserver.onResize(height)
+  }
+
+  addEventListeners() {
+
+    window.addEventListener('scroll', () => {
+
+      this.onScroll()
+
+    })
+
+    window.addEventListener('resize', () => {
+
+      this.onResize()
+
+    })
+
   }
 }
 
@@ -35,15 +70,16 @@ export default class Header {
  * scroll observer
  */
 type HeaderScrollObserverOptions = {
-  onScroll: () => void
-  onResize: (height: number) => void
   setQuantity: (quantity: number) => void
+  onScroll: () => void
+  onResize: () => void
 }
 
 export class HeaderScrollObserver extends Component {
   private monitoredQuantity: number
 
   constructor() {
+
     super({
       element: '[data-ui="header"]',
       elements: {
@@ -52,10 +88,14 @@ export class HeaderScrollObserver extends Component {
       },
     })
 
-    this.monitoredQuantity = 100
+    this.monitoredQuantity = 0//初期値（Header初期化時にsetされる）
+
   }
 
-  onScroll() {
+  public onScroll() {
+    /**
+     * スクロール量が閾値を超えたら、ヘッダーにスタイルを付与する
+     */
     const scrollPosition = window.scrollY
 
     if (this.monitoredQuantity < scrollPosition) {
@@ -63,14 +103,16 @@ export class HeaderScrollObserver extends Component {
     } else {
       this.element.classList.remove('scrolled')
     }
+
   }
 
-  onResize(quantity: number) {
-    this.setQuantity(quantity)
+  public onResize() {
   }
 
-  setQuantity(quantity: number) {
+  public setQuantity(quantity: number) {
+
     this.monitoredQuantity = quantity
+
   }
 }
 
@@ -87,29 +129,41 @@ export class HeaderHeightCalculator extends Component {
   private headerHeight: number
 
   constructor() {
+
     super({
       element: '[data-ui="header"]',
       elements: {},
     })
 
     this.headerHeight = this.element.offsetHeight
+
   }
 
   private calcHeaderHeight() {
+
     this.headerHeight = this.element.offsetHeight
+
   }
 
   private setHeaderHeight() {
+    /**
+     * ヘッダーの高さをグローバルなCSS変数にセットする
+     */
     document.documentElement.style.setProperty('--header-height', `${this.headerHeight}px`)
+
   }
 
   public onResize() {
+
     this.calcHeaderHeight()
 
     this.setHeaderHeight()
+
   }
 
   public getHeaderHeight() {
+
     return this.headerHeight
+
   }
 }
