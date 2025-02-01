@@ -23,11 +23,10 @@
   <?php wp_body_open(); ?>
 
   <?php
-  get_template_part("template-part/common/svg");; ?>
+  get_template_part("template-part/common/svg"); ?>
 
   <?php
-  // get_template_part("template-part/common/common-preloader");
-  ?>
+  get_template_part("template-part/common/common-preloader");  ?>
 
 
   <header class="header" id="header" data-ui="header">

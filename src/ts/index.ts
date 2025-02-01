@@ -6,7 +6,7 @@ import ViewportCalculator from '@ts/utility/ViewportCalculator'
 import DrawerNavigation, { DrawerMenu, DrawerButton } from '@ts/common/DrawerNavigation'
 import Header, { HeaderScrollObserver, HeaderHeightCalculator } from '@ts/common/Header'
 import { Top } from '@ts/pages/Top/Top'
-import { PageInterface } from '@ts/abstract/Page'
+import Page from '@ts/abstract/Page'
 import { StoreProvider, Store } from '@ts/store/StoreProvider'
 
 class App {
@@ -25,13 +25,11 @@ class App {
   private store: Store | null = null
 
   //UI layout
-  // private preloader: Preloader | null = null
+  private preloader: Preloader | null = null
   private drawerNavigation: DrawerNavigation | null = null
   private header: Header | null = null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private pages: { [key: string]: PageInterface } = {}
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private page: PageInterface | null = null
+  private pages: { [key: string]: Page } = {}
+  private page: Page | null = null
 
   constructor() {
 
@@ -59,16 +57,17 @@ class App {
     this.createUserAgentInformer()//UAを取得
     this.createBreakPointObserver()//BPを設定
 
-    //init layout parts
-    // this.createPreloader()
-    this.createDrawerNavigation()//ドロワーナビゲーションのUIを構築
-    this.createHeaderUI()//ヘッダーUIを構築
-
     //store
     this.createStore()// (ページの状態を管理、MPAでは使う場面は少なそうだけど念のため、用意している。)
 
     //pages(ページの選択肢を管理)
     this.createPages()//ページの作成（=>ページ独自の実装はこのメソッド配下に存在）
+    this.createPage()
+
+    //init layout parts
+    this.createPreloader()//プリローダーUIを構築
+    this.createDrawerNavigation()//ドロワーナビゲーションのUIを構築
+    this.createHeaderUI()//ヘッダーUIを構築
 
     //events（イベントを登録。原則、リサイズとスクロール）
     this.createEvents()
@@ -119,12 +118,41 @@ class App {
 
   }
 
-  // private createPreloader() {
-  //   const loader = new Loader()
-  //   const animator = new Animator()
+  /**
+   * ページ一覧と、現在のページ独自のUIを構築
+   */
+  private createPages() {
 
-  //   this.preloader = new Preloader(loader, animator)
-  // }
+    this.pages = {
+      top: new Top(),
+    }
+
+  }
+
+  createPage() {
+
+    this.page = this.pages[this.template ?? '']
+    this.page?.create()
+
+  }
+
+  /**
+   * プリローダーUIを構築
+   */
+  private createPreloader() {
+    const loader = new Loader()
+    const animator = new Animator()
+
+    if (!this.page) {
+      Logger.log('from App.ts / createPreloader() => page is not found')
+
+      return
+
+    }
+
+    this.preloader = new Preloader(this.page, loader, animator)
+
+  }
 
 
   /**
@@ -152,26 +180,15 @@ class App {
 
   }
 
+  /**
+   * ビューポートのサイズを取得し、css変数に格納する
+   */
   private createViewportCalculator() {
 
     this.viewportCalculator = new ViewportCalculator()
 
   }
 
-
-  /**
-   * ページ一覧と、現在のページ独自のUIを構築
-   */
-  private createPages() {
-
-    this.pages = {
-      top: new Top(),
-    }
-
-    this.page = this.pages[this.template ?? '']
-
-    this.page?.create()
-  }
 
   /**
    * events(Appにおける各種イベント発火時のメソッド)
@@ -185,8 +202,8 @@ class App {
       height: window.innerHeight,
     })
 
-
     Logger.log(`from App.ts:onResize() => resized`)
+
   }
 
   private onScroll() { }
@@ -229,7 +246,7 @@ class App {
   /**
    * ページの表示
    */
-  private start() {
+  private async start() {
     //デバイスの特定
     this.device = this.breakpointsObserver?.getCurrentDevice() as string
 
@@ -239,13 +256,8 @@ class App {
     //ページUIの表示待機
     this.page?.set()
 
-    // this.preloader?.once('loaded', async () => {
-    //   await this.preloader?.hideAnimation()
-
-    //   this.update()
-
-    //   this.preloader?.destroy()
-    // })
+    //プリローダーUIの動作
+    await this.preloader?.load()
 
     //ページUIの表示
     this.page?.show()

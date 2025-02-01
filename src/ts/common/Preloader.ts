@@ -1,188 +1,195 @@
-import Component from '@ts/abstract/Component'
 import GSAP from 'gsap'
-import * as THREE from 'three'
 
-import Assets from '@ts/common/singleton/Assets'
-
+import Component from '@ts/abstract/Component'
 import Logger from '@ts/utility/Logger'
+import Page from '@ts/abstract/Page'
 
 /**
- * Loader
+ * Asset Loader
  */
-type TLoader = {
-  loadAssets: (assets: HTMLImageElement[], indicator: HTMLElement) => Promise<void>
-  // onAssetLoaded: (indicator: HTMLElement) => void
+interface ILoader {
+  loadAssets(assets: HTMLImageElement[], indicator: HTMLElement): Promise<void>
 }
 
-export class Loader implements TLoader {
-  private textureLoader: THREE.TextureLoader
-  private globalAssets: Assets
-  private totalLength: number
-  private length: number
-  private textures: { [key: number]: THREE.Texture }
+export class Loader implements ILoader {
 
-  constructor() {
-    this.globalAssets = Assets.getInstance()
+  private loadedCount: number = 0
+  private totalAssets: number = 0
 
-    this.totalLength = 0
+  public async loadAssets(assets: HTMLImageElement[], indicator: HTMLElement): Promise<void> {
 
-    this.length = 0
-
-    this.textures = {}
-
-    this.textureLoader = new THREE.TextureLoader()
-  }
-
-  public async loadAssets(assets: any[], indicator: HTMLElement): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.totalLength = assets.length
 
-      assets.forEach((imageDom) => {
-        const image = new Image()
+      this.totalAssets = assets.length
 
-        const id = imageDom.getAttribute('data-id')
+      /**
+       * 画像がない場合は即resolveする
+       */
+      if (this.totalAssets === 0) {
 
-        image.crossOrigin = 'anonymous'
+        resolve()
+        return
 
-        image.src = imageDom.getAttribute('data-src')
+      }
 
-        image.onload = () => {
-          const texture = this.textureLoader.load(image.src)
 
-          texture.needsUpdate = true
+      assets.forEach((image) => {
 
-          this.textures[id] = texture
-
-          Logger.log(`from Preloader.ts / loaded $id:${id} | texture ${texture}`)
-
+        /**
+         * 画像が読み込み済みの場合は即resolveする
+         */
+        if (image.complete) {
           this.onAssetLoaded(indicator, resolve)
+          return
         }
+
+        /**
+         * 画像が読み込み中の場合はloadイベントを待つ
+         */
+        image.onload = () => this.onAssetLoaded(indicator, resolve)
 
         image.onerror = (e) => {
-          Logger.error(`from Preloader.ts / failed to load ${image.src}`)
-
+          Logger.error(`Failed to load ${image.src}`)
           reject(e)
         }
+
       })
     })
   }
 
-  private onAssetLoaded(indicator: HTMLElement, resolve: () => void) {
-    this.length += 1
+  /**
+   * 各画像の読み込み完了時の処理
+   */
+  private onAssetLoaded(indicator: HTMLElement, resolve: () => void): void {
 
-    const percent = this.length / this.totalLength
+    this.loadedCount++
 
-    this.countUp(indicator, percent * 100)
+    const percent = (this.loadedCount / this.totalAssets) * 100
 
-    if (this.length === this.totalLength) {
-      this.onLoaded(resolve)
+    this.updateLoadingProgress(indicator, percent)
+
+    if (this.loadedCount === this.totalAssets) {
+      resolve()
     }
+
   }
 
-  private countUp(indicator: HTMLElement, percent: number) {
-    const hundred = indicator.querySelector(
-      '[data-ui="preloader-count-digit-hundred"]'
-    ) as HTMLElement
+  /**
+   * 画像読み込み進捗の表示を更新する
+   */
+  private updateLoadingProgress(indicator: HTMLElement, percent: number): void {
 
-    const ten = indicator.querySelector('[data-ui="preloader-count-digit-ten"]') as HTMLElement
+    const hundreds = Math.floor(percent / 100)
+    const tens = Math.floor((percent / 10) % 10)
+    const ones = Math.floor(percent % 10)
 
-    const one = indicator.querySelector('[data-ui="preloader-count-digit-one"]') as HTMLElement
+    const updateDigit = (selector: string, value: number) => {
 
-    let hundreds: number = Math.floor((percent / 100) % 100)
+      const element = indicator.querySelector(selector) as HTMLElement
 
-    let tens: number = Math.floor((percent / 10) % 10)
+      if (element) {
+        element.style.setProperty('--progress', value.toString())
+      }
 
-    let ones: number = Math.floor(percent % 10)
+    }
 
-    hundred.style.setProperty('--progress', hundreds.toString())
+    updateDigit('[data-ui="preloader-count-digit-hundred"]', hundreds)
+    updateDigit('[data-ui="preloader-count-digit-ten"]', tens)
+    updateDigit('[data-ui="preloader-count-digit-one"]', ones)
 
-    ten.style.setProperty('--progress', tens.toString())
-
-    one.style.setProperty('--progress', ones.toString())
-  }
-
-  private onLoaded(resolve: () => void) {
-    this.globalAssets.setTextures(this.textures)
-
-    Logger.log(`from Preloader.ts / assets ${this.totalLength} assets loaded`)
-
-    resolve()
   }
 }
 
 /**
- * animatior
+ * Loading Animation Controller
  */
-
-type TAnimator = {
-  hideAnimation: (elements: any, resolve: () => void) => Promise<void>
+interface IAnimator {
+  hidePreloader(element: HTMLElement): Promise<void>
 }
 
-export class Animator implements TAnimator {
-  public async hideAnimation(elements: any, resolve: () => void): Promise<void> {
-    GSAP.to(elements, {
-      autoAlpha: 0,
-      duration: 1,
-      ease: 'power2.out',
-      onUpdate: function () {
-        const progress = this.progress()
-
-        if (progress > 0.8) {
-          // this logic makes me can modify animation finally.
-
-          resolve()
+export class Animator implements IAnimator {
+  public hidePreloader(element: HTMLElement): Promise<void> {
+    return new Promise((resolve) => {
+      GSAP.to(element, {
+        autoAlpha: 0,
+        duration: 1,
+        ease: 'power2.out',
+        onUpdate: function () {
+          if (this.progress() > 0.8) {
+            resolve()
+          }
         }
-      },
-      // onComplete: () => {
-      //   resolve()
-      // },
+      })
     })
   }
 }
 
+/**
+ * Main Preloader Component
+ */
 export default class Preloader extends Component {
-  private loader: TLoader
-  private animator: TAnimator
+  private loader: ILoader
+  private animator: IAnimator
+  private page: Page
 
-  constructor(loader: TLoader, animator: TAnimator) {
+  constructor(page: Page, loader: ILoader, animator: IAnimator) {
+
     super({
       element: '[data-ui="preloader"]',
       elements: {
         count: '[data-ui="preloader-count"]',
-        assets: '[data-ui="preloader-assets"]',
       },
     })
 
-    Logger.log(
-      `from Preloader.ts / this.element: ${this.element} | this.elements: ${this.elements}`
-    )
-
+    this.page = page
     this.loader = loader
-
     this.animator = animator
+
   }
 
-  public async startLoading() {
-    const assets = [...this.elements.assets.querySelectorAll('img')]
-
-    const indicator = this.elements.count as HTMLElement
-
-    await this.loader.loadAssets(assets, indicator)
-
-    this.emit('loaded')
+  private isTopPage(): boolean {
+    return this.page.id === 'top'
   }
 
-  public async hideAnimation() {
-    return new Promise<void>((resolve) => {
-      const element = this.element
+  /**
+   * ロード処理→プリローダー非表示アニメーション→プリローダー削除
+   */
+  public async load(): Promise<void> {
 
-      this.animator.hideAnimation(element, resolve)
-    })
+    if (!this.isTopPage()) {
+      this.destroy()
+      return
+    }
+
+    try {
+
+      const assets: HTMLImageElement[] = Array.from(document.querySelectorAll('img'))
+
+      const indicator = this.elements.count as HTMLElement
+
+      await this.loader.loadAssets(assets, indicator)
+
+      await this.animator.hidePreloader(this.element)
+
+      this.destroy()
+
+    } catch (error) {
+
+      Logger.error('Preloader error:', error)
+      throw error
+
+    }
   }
 
-  destroy() {
-    this.element.parentNode.removeChild(this.element)
+  public destroy(): void {
 
-    Logger.log('from Preloader.ts / preloader destroyed')
+    if (this.element.parentNode) {
+
+      this.element.parentNode.removeChild(this.element)
+
+    }
+
+    Logger.log('Preloader destroyed')
+
   }
 }

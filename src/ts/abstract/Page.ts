@@ -4,7 +4,6 @@ import each from 'lodash/each'
 
 import AsyncLoad from '@ts/utility/AsyncLoad'
 import Logger from '@ts/utility/Logger'
-import { StoreInterface } from '@ts/store/StoreProvider'
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type TElement = any //基本的にstringが入ってきて、HTMLElementに変換されるから、anyでいい。
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -119,7 +118,7 @@ export default abstract class Page {
     })
   }
 
-  private createAnimations() {}
+  private createAnimations() { }
 
   /**
    * animations
@@ -206,21 +205,21 @@ export default abstract class Page {
   /**
    * events
    */
-  public onWheel() {}
+  public onWheel() { }
 
-  public onScroll() {}
+  public onScroll() { }
 
-  public onResize() {}
+  public onResize() { }
 
   /**
    * loop
    */
-  public update() {}
+  public update() { }
 
   /**
    * listeners
    */
-  private addEventListeners() {}
+  private addEventListeners() { }
 
-  private removeEventListeners() {}
+  private removeEventListeners() { }
 }

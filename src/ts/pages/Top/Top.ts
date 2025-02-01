@@ -11,6 +11,7 @@ export class Top extends Page {
 
   constructor() {
     const store = StoreProvider.getGlobalStore('app')
+
     if (!store) {
       throw new Error('Store "app" not found')
     }
